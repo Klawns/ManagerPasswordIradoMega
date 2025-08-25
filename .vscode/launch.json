@@ -1,0 +1,14 @@
+{
+  "configurations": [
+    {
+      "type": "java",
+      "name": "Spring Boot-GerenciadorDeSenhasApplication<GerenciadorDeSenhas>",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "mainClass": "com.example.GerenciadorDeSenhas.GerenciadorDeSenhasApplication",
+      "projectName": "GerenciadorDeSenhas",
+      "args": "",
+      "envFile": "${workspaceFolder}/.env"
+    }
+  ]
+}
