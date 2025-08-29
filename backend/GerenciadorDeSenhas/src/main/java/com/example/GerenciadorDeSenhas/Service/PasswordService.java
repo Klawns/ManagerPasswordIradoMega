@@ -6,7 +6,6 @@ import com.example.GerenciadorDeSenhas.DTO.PasswordViewDTO;
 import com.example.GerenciadorDeSenhas.Model.PasswordEntity;
 import com.example.GerenciadorDeSenhas.Repository.PasswordRepository;
 import com.example.GerenciadorDeSenhas.Repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,7 +16,6 @@ public class PasswordService {
     private final AesGcmCrypto crypto;
     private final UserRepository userRepo;
 
-    @Autowired
     public PasswordService(PasswordRepository repo, AesGcmCrypto crypto, UserRepository userRepo) {
         this.repo = repo;
         this.crypto = crypto;
