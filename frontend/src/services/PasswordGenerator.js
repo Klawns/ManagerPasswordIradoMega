@@ -2,8 +2,7 @@ export default function generatePassword(
   includeUppercase,
   includeNumbers,
   includeSymbols,
-  length,
-  setPassword
+  length
 ) {
   let lower = "abcdefghijklmnopqrstuvwxyz";
   let upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -19,5 +18,5 @@ export default function generatePassword(
   for (let i = 0; i < length; i++) {
     newPassword += chars.charAt(Math.floor(Math.random() * chars.length));
   }
-  setPassword(newPassword);
+  return newPassword;
 }

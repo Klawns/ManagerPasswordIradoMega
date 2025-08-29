@@ -26,7 +26,7 @@ export default function VaultPage() {
     await createPassword({ ...newItem, userId: user.id });
     const data = await listPasswords(user.id);
     setPasswords(data);
-    setShowPasswordGenerator(false); 
+    setShowPasswordGenerator(false);
   }
 
   async function handleDeletePassword(id) {
@@ -88,10 +88,10 @@ export default function VaultPage() {
       </div>
 
       {showPasswordGenerator && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div className="fixed inset-0 backdrop-blur-md flex items-center justify-center z-50">
           <GeneratorPage
             close={() => setShowPasswordGenerator(false)}
-            onSave={handleSavePassword} 
+            onSave={handleSavePassword}
           />
         </div>
       )}

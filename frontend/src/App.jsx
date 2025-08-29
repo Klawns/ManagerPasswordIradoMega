@@ -4,7 +4,7 @@ import LoginPage from "./Pages/LoginPage";
 import RegisterPage from "./Pages/RegisterPage";
 import VaultPage from "./Pages/VaultPage";
 import GeneratorPage from "./Pages/PasswordGeneratorPage";
-
+import CustomizePage from "./Pages/CustomizePasswordPage";
 function App() {
   return (
     <div>
@@ -15,6 +15,7 @@ function App() {
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/" element={<VaultPage />} />
           <Route path="/generator" element={<GeneratorPage />} />
+          <Route path="/custompassword" element={<CustomizePage />} />
         </Routes>
       </BrowserRouter>
     </div>
