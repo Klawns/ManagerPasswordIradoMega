@@ -1,6 +1,6 @@
 import { useState } from "react";
 import CheckBoxesPassword from "../Components/CheckBoxesPassword";
-import generatePassword from "../services/PasswordGenerator";
+import handleGeneratePassword from "../services/HandleGenerate";
 
 export default function CustomizePassword(props) {
   const [length, setLength] = useState(12);
@@ -8,24 +8,16 @@ export default function CustomizePassword(props) {
   const [includeNumbers, setIncludeNumbers] = useState(true);
   const [includeSymbols, setIncludeSymbols] = useState(true);
 
-  function handleGenerate() {
-    const newPassword = generatePassword(
-      includeUppercase,
-      includeNumbers,
-      includeSymbols,
-      length
-    );
-    props.onGenerate(newPassword);
-    props.setShowCustomize(false);
-  }
   return (
     <div className="bg-gray-800 p-8 rounded-2xl border border-gray-700 w-[30rem]">
-      <h1 className="text-3xl font-bold text-center mb-8 tracking-wide">
+      <h1 className="text-3xl font-bold text-center mb-8 tracking-wide text-white">
         Personalizar Senha
       </h1>
       <div className="space-y-4">
         <div>
-          <label className="block text-sm font-medium">Tamanho: {length}</label>
+          <label className="block text-sm font-medium text-white">
+            Tamanho: {length}
+          </label>
           <input
             type="range"
             min="4"
@@ -65,7 +57,16 @@ export default function CustomizePassword(props) {
       </div>
 
       <button
-        onClick={handleGenerate}
+        onClick={() =>
+          handleGeneratePassword(
+            includeUppercase,
+            includeNumbers,
+            includeSymbols,
+            length,
+            props.onGenerate,
+            props.close
+          )
+        }
         className="w-full mt-6 py-3 bg-green-600 hover:bg-green-500 rounded-lg font-semibold text-white shadow-md transition"
       >
         Gerar Senha

@@ -1,90 +1,92 @@
-import { useEffect, useState } from "react";
+import PasswordCard from "../Components/PasswordCard";
 import GeneratorPage from "./PasswordGeneratorPage";
-import copyToClipboard from "../utils/Clipboard";
-import {
-  listPasswords,
-  createPassword,
-  deletePassword,
-} from "../services/PasswordService";
+import { Search, User, Plus, X } from "lucide-react";
+import { useState } from "react";
+import { usePasswords } from "../hooks/usePasswods";
+import { useNavigate } from "react-router-dom";
 
-export default function VaultPage() {
+function VaultPage() {
+  const navigate = useNavigate();
+  const storedUser = JSON.parse(localStorage.getItem("user")); // usuário logado
   const [showPasswordGenerator, setShowPasswordGenerator] = useState(false);
-  const [passwords, setPasswords] = useState([]);
-  const user = JSON.parse(localStorage.getItem("user"));
+  const [showLeaveButton, setLeaveButton] = useState(false);
 
-  useEffect(() => {
-    async function load() {
-      if (user) {
-        const data = await listPasswords(user.id);
-        setPasswords(data);
-      }
-    }
-    load();
-  }, [user]);
+  // usePasswords sempre chamado, mesmo que storedUser seja null
+  const { passwords, handleSavePassword, handleDeletePassword } = usePasswords(
+    storedUser || { id: null }
+  );
 
-  async function handleSavePassword(newItem) {
-    await createPassword({ ...newItem, userId: user.id });
-    const data = await listPasswords(user.id);
-    setPasswords(data);
-    setShowPasswordGenerator(false);
-  }
-
-  async function handleDeletePassword(id) {
-    await deletePassword(id);
-    const data = await listPasswords(user.id);
-    setPasswords(data);
+  // Se não houver usuário, apenas renderize aviso
+  if (!storedUser) {
+    return (
+      <div className="flex justify-center items-center h-screen w-screen bg-gray-900 text-white">
+        <p>Usuário não autenticado. Faça login para acessar o Vault.</p>
+      </div>
+    );
   }
 
   return (
-    <div className="w-screen h-screen flex flex-col bg-gradient-to-br from-gray-950 via-gray-900 to-gray-950 text-gray-100 p-8">
-      <header className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-bold">Vault</h1>
-        <button
-          onClick={() => setShowPasswordGenerator(true)}
-          className="bg-indigo-600 hover:bg-indigo-500 px-4 py-2 rounded-lg font-semibold shadow-md transition"
-        >
-          + Nova Senha
-        </button>
-      </header>
+    <div className="flex justify-center items-start min-h-screen w-screen bg-gray-900 p-8">
+      <div className="w-full max-w-4xl bg-gray-800 rounded-lg shadow-xl p-8 border border-gray-700">
+        {/* Cabeçalho */}
+        <div className="flex items-center mb-6 space-x-4">
+          <h1 className="text-2xl font-bold text-white flex-shrink-0">
+            Meu Vault
+          </h1>
 
-      <div className="flex-1 overflow-y-auto rounded-lg border border-gray-700 bg-gray-800/90 shadow-lg backdrop-blur-sm">
-        <table className="w-full border-collapse">
-          <thead>
-            <tr className="bg-gray-900">
-              <th className="px-4 py-3">Site</th>
-              <th className="px-4 py-3">Usuário</th>
-              <th className="px-4 py-3">Senha</th>
-              <th className="px-4 py-3">Ações</th>
-            </tr>
-          </thead>
-          <tbody>
-            {passwords.map((p) => (
-              <tr
-                key={p.id}
-                className="border-t border-gray-700 hover:bg-gray-700/50 transition"
-              >
-                <td className="px-4 py-3">{p.site}</td>
-                <td className="px-4 py-3">{p.username}</td>
-                <td className="px-4 py-3">
-                  <button
-                    onClick={() => copyToClipboard(p.password)}
-                    className="px-3 py-1 bg-blue-600 hover:bg-blue-500 rounded-md text-sm"
-                  >
-                    Copiar
-                  </button>
-                </td>
-                <td className="px-4 py-3 space-x-2">
-                  <button
-                    onClick={() => handleDeletePassword(p.id)}
-                    className="px-3 py-1 bg-red-600 hover:bg-red-500 rounded-md text-sm"
-                  >
-                    Excluir
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+          <div className="relative flex-1">
+            <input
+              type="text"
+              placeholder="Buscar no Vault..."
+              className="w-full pl-10 pr-4 py-2 rounded-lg bg-gray-700 text-gray-300 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500"
+            />
+            <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">
+              <Search className="h-5 w-5" />
+            </span>
+          </div>
+
+          <div className="relative inline-block">
+            <div className="bg-purple-600 p-2 rounded-full cursor-pointer">
+              <button onClick={() => setLeaveButton(!showLeaveButton)}>
+                <User className="h-6 w-6 text-white" />
+              </button>
+            </div>
+
+            {showLeaveButton && (
+              <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2">
+                <button
+                  className="bg-red-600 text-white p-2 rounded-full shadow-lg hover:bg-red-700 transition-colors duration-200"
+                  onClick={() => navigate("/login")}
+                >
+                  <X className="h-4 w-4" />
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Botão de adicionar senha */}
+        <button
+          className="flex items-center space-x-2 bg-purple-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-purple-700 transition-colors duration-200 mb-6"
+          onClick={() => setShowPasswordGenerator(true)}
+        >
+          <Plus className="h-5 w-5" />
+          <span>Adicionar Nova Senha</span>
+        </button>
+
+        {/* Lista de senhas */}
+        <div className="space-y-4">
+          {passwords.map((item) => (
+            <PasswordCard
+              key={item.id}
+              id={item.id}
+              passwordIdentify={item.passwordIdentify}
+              username={item.username}
+              password={item.password}
+              onDelete={() => handleDeletePassword(item.id)}
+            />
+          ))}
+        </div>
       </div>
 
       {showPasswordGenerator && (
@@ -98,3 +100,5 @@ export default function VaultPage() {
     </div>
   );
 }
+
+export default VaultPage;

@@ -1,40 +1,13 @@
 import { useState } from "react";
-import api from "../services/api";
 import { useNavigate } from "react-router-dom";
+import { handleLogin } from "../services/HandleLogin";
 
 export default function LoginPage() {
-  const navigate = useNavigate();
-
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [messageError, setMessageError] = useState("");
   const [messageConclued, setMessageConclued] = useState("");
-
-  const handleLogin = async (e) => {
-    e.preventDefault();
-
-    try {
-      const response = await api.post("/api/users/login", {
-        username,
-        password,
-      });
-
-      console.log("Resposta da api: ", response.data);
-      setMessageConclued("Login realizado com sucesso!");
-
-      // salvar dados do usuário no localStorage (id e username)
-      localStorage.setItem("user", JSON.stringify(response.data));
-
-      // redirecionar para vault
-      navigate("/vault");
-    } catch (error) {
-      if (error.response) {
-        setMessageError(error.response.data);
-      } else {
-        setMessageError("Erro ao conectar ao servidor.");
-      }
-    }
-  };
+  const navigate = useNavigate();
 
   return (
     <div className="w-screen h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-gray-100 p-6">
@@ -43,7 +16,19 @@ export default function LoginPage() {
           Login
         </h1>
 
-        <form className="space-y-6" onSubmit={handleLogin}>
+        <form
+          className="space-y-6"
+          onSubmit={(e) => {
+            handleLogin(
+              e,
+              setMessageConclued,
+              setMessageError,
+              username,
+              password,
+              navigate
+            );
+          }}
+        >
           <div>
             <input
               value={username}

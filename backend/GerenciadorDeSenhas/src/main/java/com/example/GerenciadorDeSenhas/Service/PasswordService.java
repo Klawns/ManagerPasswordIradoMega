@@ -27,7 +27,7 @@ public class PasswordService {
         return repo.findAllByUserId(userId).stream().map(e -> {
             try {
                 String plain = crypto.decrypt(e.getPasswordIv(), e.getPasswordCipher());
-                return new PasswordViewDTO(e.getId(), e.getSite(), e.getUsername(), plain);
+                return new PasswordViewDTO(e.getId(), e.getSite(), e.getUsername(),e.getPasswordIdentify(), plain);
             } catch (Exception ex) {
                 throw new RuntimeException("Erro ao descriptografar senha do site " + e.getSite(), ex);
             }
@@ -44,13 +44,16 @@ public class PasswordService {
         e.setUsername(dto.username());
         e.setPasswordIv(enc.ivBase64());
         e.setPasswordCipher(enc.cipherBase64());
+        e.setPasswordIdentify(dto.passwordIdentify());
         e.setUser(user);
 
         var saved = repo.save(e);
-        return new PasswordViewDTO(saved.getId(), saved.getSite(), saved.getUsername(), dto.password());
+        return new PasswordViewDTO(saved.getId(), saved.getSite(), saved.getUsername(),saved.getPasswordIdentify(), dto.password());
     }
 
     public void delete(Long id) {
-        repo.deleteById(id);
+        var entity = repo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Senha não encontrada"));
+        repo.delete(entity);
     }
 }

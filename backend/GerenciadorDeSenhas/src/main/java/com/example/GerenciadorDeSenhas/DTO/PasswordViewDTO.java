@@ -4,5 +4,6 @@ public record PasswordViewDTO (
     Long id,
     String site,
     String username,
+    String passwordIdentify,
     String password
 ){ }

@@ -1,6 +1,6 @@
 import { useState } from "react";
-import api from "../services/api";
 import { useNavigate } from "react-router-dom";
+import { handleRegister } from "../services/HandleRegister";
 
 export default function RegisterPage() {
   const [username, setUsername] = useState("");
@@ -10,40 +10,25 @@ export default function RegisterPage() {
 
   const navigate = useNavigate();
 
-  const handleRegister = async (e) => {
-    e.preventDefault();
-
-    try {
-      const response = await api.post("/api/users/register", {
-        username: username,
-        password: password,
-      });
-
-      console.log("Resposta da API:", response.data);
-
-      const user = response.data;
-      localStorage.setItem("user", JSON.stringify(user));
-
-      setMessageConclued("Usuário registrado com sucesso!");
-
-      navigate("/vault");
-    } catch (error) {
-      if (error.response) {
-        console.error(error.response.data);
-        setMessageError("Erro ao registrar");
-      } else {
-        setMessageError("Erro ao conectar ao servidor.");
-      }
-    }
-  };
-
   return (
     <div className=" w-screen h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-gray-100 p-6">
       <div className="w-full max-w-md bg-gray-800/90 p-8 rounded-2xl shadow-2xl backdrop-blur-sm border border-gray-700">
         <h1 className="text-3xl font-bold text-center mb-8 tracking-wide">
           Registro
         </h1>
-        <form className="space-y-6" onSubmit={handleRegister}>
+        <form
+          className="space-y-6"
+          onSubmit={(e) =>
+            handleRegister(
+              e,
+              username,
+              password,
+              setMessageError,
+              setMessageConclued,
+              navigate
+            )
+          }
+        >
           <div>
             <input
               required

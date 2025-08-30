@@ -2,9 +2,9 @@ import "./App.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import LoginPage from "./Pages/LoginPage";
 import RegisterPage from "./Pages/RegisterPage";
-import VaultPage from "./Pages/VaultPage";
 import GeneratorPage from "./Pages/PasswordGeneratorPage";
 import CustomizePage from "./Pages/CustomizePasswordPage";
+import VaultPage from "./Pages/VaultPage";
 function App() {
   return (
     <div>

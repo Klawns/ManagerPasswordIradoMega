@@ -22,7 +22,7 @@ export default function GeneratorPage(props) {
 
   return (
     <div className="bg-gray-800 p-8 rounded-2xl border border-gray-700 w-[30rem]">
-      <h1 className="text-3xl font-bold text-center mb-8 tracking-wide">
+      <h1 className="text-3xl font-bold text-center mb-8 tracking-wide text-white">
         Gerenciador de Senhas
       </h1>
 
@@ -56,13 +56,13 @@ export default function GeneratorPage(props) {
             readOnly={isGenerated}
             value={password}
             placeholder="Sua senha aparecerá aqui"
-            className="flex-1 px-4 py-2 rounded-l-lg bg-gray-900 border border-gray-700 outline-none"
+            className="flex-1 px-4 py-2 rounded-l-lg bg-gray-900 border border-gray-700 outline-none text-white"
           />
           <button
             onClick={() => setShowCustomize(true)}
             className="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 rounded-r-lg font-semibold"
           >
-            <WandSparkles size={25} />
+            <WandSparkles size={25} color="white" />
           </button>
         </div>
         <p className="text-amber-600 text-xs text-left">

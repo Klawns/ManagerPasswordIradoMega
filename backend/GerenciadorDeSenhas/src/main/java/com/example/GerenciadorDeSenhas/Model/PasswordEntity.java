@@ -10,6 +10,7 @@ public class PasswordEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String passwordIdentify;
     private String site;
     private String username;
 
@@ -70,5 +71,12 @@ public class PasswordEntity {
 
     public void setUser(User user) {
         this.user = user;
+    }
+    public String getPasswordIdentify() {
+        return passwordIdentify;
+    }
+
+    public void setPasswordIdentify(String passwordIdentify) {
+        this.passwordIdentify = passwordIdentify;
     }
 }
